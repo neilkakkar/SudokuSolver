@@ -35,8 +35,34 @@ pair<int,int> findEmptyIndex(vector<vector<int> >& board){
     return make_pair(-1,-1);
 
 }
+
+pair<int,int> findSmallestEmptyIndex(vector<vector<int> >& board){
+    vector<pair<int,int> > possibleVals;
+    for(int i=0;i<N;i++){
+        for(int j=0;j<N;j++){
+            if(board[i][j]==0)possibleVals.push_back({i,j});
+        }
+    }
+    int n = possibleVals.size();
+    if(n==0) return make_pair(-1,-1);
+
+    int sizes[n];
+    for(int i=0;i<n;i++){
+        sizes[i] = possibleNums(board,possibleVals[i]).size();
+    }
+    int minSize =sizes[0];
+    int minId =0;
+    for(int i=1;i<n;i++){
+        if(minSize > sizes[i]){
+            minSize = sizes[i];
+            minId =i;
+        }
+    }
+    return possibleVals[minId];
+}
 bool sudokuSolution(vector<vector<int> >& board){
-    pair<int,int> index = findEmptyIndex(board);
+    //pair<int,int> index = findEmptyIndex(board);
+    pair<int,int> index = findSmallestEmptyIndex(board);
 
     if(index.first==-1)return true;
 
