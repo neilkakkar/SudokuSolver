@@ -2,10 +2,11 @@
 
 
 vector<int> possibleNums(vector<vector<int> >& board, pair<int,int> index){
+    // generates the possible numbers that can be places at the given index.
     vector<int> ans;
     int i= index.first;
     int j= index.second;
-    int poss[10];
+    int poss[10]; //enumerates the 9 possibilities.
     for(int k=0;k<10;k++)poss[k]=0;
     //check row & column
     for(int k=0;k<N;k++){
@@ -27,6 +28,7 @@ vector<int> possibleNums(vector<vector<int> >& board, pair<int,int> index){
 }
 
 pair<int,int> findEmptyIndex(vector<vector<int> >& board){
+    // Finds the first empty index, which we will choose as the branch for inserting next number.
     for(int i=0;i<N;i++){
         for(int j=0;j<N;j++){
             if(board[i][j]==0)return make_pair(i,j);
@@ -37,6 +39,8 @@ pair<int,int> findEmptyIndex(vector<vector<int> >& board){
 }
 
 pair<int,int> findSmallestEmptyIndex(vector<vector<int> >& board){
+    // heuristic to speed up findEmptyIndex -> Finds the empty index with least number of possibilities.
+    // TO DO : Can optimize this, right now uses a lot of unnecessary extra space -> The extra vectors being created for size.
     vector<pair<int,int> > possibleVals;
     for(int i=0;i<N;i++){
         for(int j=0;j<N;j++){
@@ -44,7 +48,7 @@ pair<int,int> findSmallestEmptyIndex(vector<vector<int> >& board){
         }
     }
     int n = possibleVals.size();
-    if(n==0) return make_pair(-1,-1);
+    if(n==0) return make_pair(-1,-1); // Invalid
 
     int sizes[n];
     for(int i=0;i<n;i++){
@@ -60,8 +64,10 @@ pair<int,int> findSmallestEmptyIndex(vector<vector<int> >& board){
     }
     return possibleVals[minId];
 }
+
 bool sudokuSolution(vector<vector<int> >& board){
-    //pair<int,int> index = findEmptyIndex(board);
+    // Final backtracking algorithm to find Sudoku solution
+    //pair<int,int> index = findEmptyIndex(board); // Normal slow solution
     pair<int,int> index = findSmallestEmptyIndex(board);
 
     if(index.first==-1)return true;
